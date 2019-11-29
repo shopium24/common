@@ -24,7 +24,7 @@ $this->registerJs('
 ', \yii\web\View::POS_END);
 
 ?>
-<?php $this->beginPage() ?>core
+<?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html>
     <head>

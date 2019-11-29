@@ -2,7 +2,6 @@
 
 namespace app\web\themes\dashboard;
 
-use Yii;
 use panix\engine\web\AssetBundle;
 
 /**
@@ -25,7 +24,7 @@ class AdminAsset extends AssetBundle
     ];
 
     public $depends = [
-        'app\web\themes\dashboard\ThemeCssAsset',
+        //'app\web\themes\dashboard\ThemeCssAsset',
         'panix\engine\assets\CommonAsset',
         'panix\engine\assets\ClipboardAsset',
         'app\web\themes\dashboard\AdminCountersAsset',
@@ -35,5 +34,6 @@ class AdminAsset extends AssetBundle
     public function init()
     {
         $this->sourcePath = __DIR__ . '/assets';
+        parent::init();
     }
 }
