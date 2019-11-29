@@ -3,11 +3,11 @@
 
 $date = new \DateTime(date('Y-m-d', time()), new \DateTimeZone('Europe/Kiev'));
 $logDate = $date->format('Y-m-d');
+use yii\web\UrlNormalizer;
 
 
-$db = YII_DEBUG ? dirname(__DIR__) . '/config/db_local.php' : dirname(__DIR__) . '/config/db.php';
 $config = [
-    'name' => 'PIXELION CMS',
+    'name' => 'Shopium24',
     'basePath' => dirname(__DIR__) . '/../',
     'language' => 'ru',
     'aliases' => [
@@ -18,7 +18,7 @@ $config = [
     //'sourceLanguage'=>'ru',
     // 'runtimePath' => '@app/backend/runtime',
     'controllerNamespace' => 'panix\engine\controllers',
-    //'defaultRoute' => 'main/main',
+    //'defaultRoute' => 'main/index',
     'bootstrap' => [
         'log',
         'maintenanceMode',
@@ -27,13 +27,13 @@ $config = [
     ],
     'controllerMap' => [
         'main' => 'panix\engine\controllers\WebController',
-        'backend' => 'panix\engine\controllers\AdminController',
+        'badmin' => 'panix\engine\controllers\AdminController',
     ],
     'modules' => [
+        'admin' => ['class' => 'panix\mod\admin\Module'],
         'plugins' => [
             'class' => 'panix\mod\plugins\Module',
             'pluginsDir' => [
-                // '@plugins/core',
                 '@panix/engine/plugins',
             ]
         ],
@@ -43,7 +43,7 @@ $config = [
             //    'class' => panix\mod\rbac\filters\AccessControl::class
             //],
         ],
-        'admin' => ['class' => 'panix\mod\admin\Module'],
+
         'user' => ['class' => 'panix\mod\user\Module'],
         //'presentation' => ['class' => 'panix\mod\presentation\Module'],
         'compare' => ['class' => 'panix\mod\compare\Module'],
@@ -51,7 +51,7 @@ $config = [
         //'shop' => ['class' => 'app\modules\shop\Module'],
         'sitemap' => ['class' => 'panix\mod\sitemap\Module'],
         'banner' => ['class' => 'panix\mod\banner\Module'],
-       // 'sendpulse' => ['class' => 'panix\mod\sendpulse\Module'],
+        // 'sendpulse' => ['class' => 'panix\mod\sendpulse\Module'],
         'contacts' => ['class' => 'panix\mod\contacts\Module'],
         'seo' => ['class' => 'panix\mod\seo\Module'],
         'discounts' => ['class' => 'panix\mod\discounts\Module'],
@@ -74,10 +74,10 @@ $config = [
         'img' => [
             'class' => 'panix\engine\components\ImageHandler',
         ],
-        'fcm' => [
+        /*'fcm' => [
             'class' => 'understeam\fcm\Client',
             'apiKey' => 'AIzaSyAbeTCpxK7OGu_lXZDSnJjV1ItkUwPOBbc', // Server API Key (you can get it here: https://firebase.google.com/docs/server/setup#prerequisites)
-        ],
+        ],*/
         'sitemap' => [
             'class' => 'app\modules\sitemap\Sitemap',
             'models' => [
@@ -158,21 +158,6 @@ $config = [
         ],
         'assetManager' => [
             'forceCopy' => YII_DEBUG,
-            //'baseUrl'=>'http://core/assets',
-            //'basePath'=>dirname(__DIR__) . '/assets',
-            'bundles' => [
-                //'yii\jui\JuiAsset' => ['css' => []],
-                'yii\jui\JuiAsset' => [
-                    //'js' => [
-                    //'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js'
-                    //]
-                ],
-                /*'panix\lib\google\maps\MapAsset' => [
-                    'options' => [
-                        'key' => '...',
-                    ]
-                ]*/
-            ],
             'appendTimestamp' => true
         ],
         'plugins' => [
@@ -210,8 +195,7 @@ $config = [
         ],
         'request' => [
             'class' => 'panix\engine\WebRequest',
-            //'baseUrl' => '/admin',
-            //'csrfParam' => '_csrf-backend',
+            'baseUrl' => '',
         ],
         'cache' => [
             'directoryLevel' => 0,
@@ -234,7 +218,7 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
-                    'categories' => ['yii\db\*','panix\engine\db\*'],
+                    'categories' => ['yii\db\*', 'panix\engine\db\*'],
                     'logVars' => [],
                     'logFile' => '@runtime/logs/' . $logDate . '/db_error.log',
                 ],
@@ -307,7 +291,41 @@ $config = [
         ],
         'languageManager' => ['class' => 'panix\engine\ManagerLanguage'],
         'settings' => ['class' => 'panix\engine\components\Settings'],
-        'urlManager' => require(__DIR__ . '/urlManager.php'),
+        'urlManager' => [
+            'class' => 'panix\engine\ManagerUrl',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => true,
+            'baseUrl' => '',
+            //'normalizer' => [
+            //    'class' => 'yii\web\UrlNormalizer',
+            //    'action' => UrlNormalizer::ACTION_REDIRECT_TEMPORARY,
+            //],
+            'rules' => [
+                '' => 'main/index',
+                'placeholder' => 'main/placeholder',
+                //'/admin' => 'admin/admin/default/index',
+                // 'admin/auth' => 'admin/auth/index',
+                ['pattern' => 'like/<type:(up|down)>/<id:\d+>', 'route' => 'main/like'],
+                // ['pattern' => 'admin/app/<controller:\w+>', 'route' => 'admin/admin/<controller>/index'],
+                //['pattern' => 'admin/app/<controller:\w+>/<action:[0-9a-zA-Z_\-]+>', 'route' => 'admin/admin/<controller>/<action>'],
+                //  ['pattern' => 'admin/<module:\w+>/<controller:[0-9a-zA-Z_\-]+>/<action:[0-9a-zA-Z_\-]+>', 'route' => '<module>/admin/<controller>/<action>'],
+                //['pattern' => 'admin/<module:\w+>', 'route' => '<module>/admin/default/index'],
+                //['pattern' => 'admin/<module:\w+>/<controller:[0-9a-zA-Z_\-]+>', 'route' => '<module>/admin/<controller>/index'],
+                //['pattern' => 'admin/<module:\w+>/<controller:[0-9a-zA-Z_\-]+>/<action:[0-9a-zA-Z_\-]+>/<page:\d+>', 'route' => '<module>/admin/<controller>/<action>'],
+               // 'http://demo.shopium24.loc/admin' => 'admin/admin/default/index',
+                ['pattern' => 'admin/auth', 'route' => 'admin/auth/index'],
+                ['pattern' => 'admin', 'route' => 'admin/admin/default/index'],
+
+                ['pattern' => 'admin/app/<controller:[0-9a-zA-Z_\-]+>', 'route' => 'admin/admin/<controller>/index'],
+                ['pattern' => 'admin/app/<controller:[0-9a-zA-Z_\-]+>/<action:[0-9a-zA-Z_\-]+>', 'route' => 'admin/admin/<controller>/<action>'],
+                ['pattern' => 'admin/<module:\w+>/<controller:[0-9a-zA-Z_\-]+>/<action:[0-9a-zA-Z_\-]+>', 'route' => '<module>/admin/<controller>/<action>'],
+                ['pattern' => 'admin/<module:\w+>', 'route' => '<module>/admin/default/index'],
+                ['pattern' => 'admin/<module:\w+>/<controller:[0-9a-zA-Z_\-]+>', 'route' => '<module>/admin/<controller>/index'],
+                ['pattern' => 'admin/<module:\w+>/<controller:[0-9a-zA-Z_\-]+>/<action:[0-9a-zA-Z_\-]+>/<page:\d+>', 'route' => '<module>/admin/<controller>/<action>'],
+
+            ],
+        ],
         'db' => [
             'class' => 'panix\engine\db\Connection',
             'charset' => 'utf8mb4', //utf8 на utf8mb4. FOR Emoji
@@ -321,28 +339,9 @@ $config = [
             //},
         ],
     ],
-    /*'as access' => [
-        'class' => panix\mod\rbac\filters\AccessControl::class,
-        'allowActions' => [
-           // '/*',
-            'admin/*',
-            // The actions listed here will be allowed to everyone including guests.
-            // So, 'admin/*' should not appear here in the production, of course.
-            // But in the earlier stages of your development, you may probably want to
-            // add a lot of actions here until you finally completed setting up rbac,
-            // otherwise you may not even take a first step.
-        ]
-    ],*/
+
     'params' => require(__DIR__ . '/params.php'),
 ];
-if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    //$config['modules']['debug']['class'] = 'yii\debug\Module';
-    //$config['modules']['debug']['traceLine'] = function ($options, $panel) {
-    //    $filePath = $options['file'];
-    //    return strtr('<a href="phpstorm://open?url={file}&line={line}">{file}:{line}</a>', ['{file}' => $filePath]);
-   // };
-    //$config['modules']['debug']['dataPath'] = '@common/runtime/debug';
-}
+
 
 return $config;
