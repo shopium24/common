@@ -8,8 +8,6 @@ Desktop.ini
 vendor/
 nbproject/
 .idea
-assets/
-runtime/
 
 composer.lock
 

@@ -5,7 +5,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'components' => [
         'assetManager' => [
-            'baseUrl' => 'http://core/assets',
+            'baseUrl' => 'http://common/assets',
             'basePath' => dirname(__DIR__) . '/assets',
         ],
     ],
