@@ -210,13 +210,8 @@ $config = [
         ],
         'request' => [
             'class' => 'panix\engine\WebRequest',
-            //'parsers' => [
-            //    'application/json' => 'yii\web\JsonParser',
-            //],
             //'baseUrl' => '/admin',
             //'csrfParam' => '_csrf-backend',
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'fpsiKaSs1Mcb6zwlsUZwuhqScBs5UgPQ',
         ],
         'cache' => [
             'directoryLevel' => 0,
