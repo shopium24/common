@@ -4,6 +4,7 @@
 //echo dirname(__DIR__);die;
 $config = [
     'basePath' => dirname(__DIR__),
+    //'basePath' => APP_PATH,
    // 'defaultRoute' => 'badmin/index',
     'components' => [
        // 'aliases' => [
@@ -36,13 +37,5 @@ $config = [
         ]
     ],
 ];
-if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['modules']['debug']['class'] = 'yii\debug\Module';
-    $config['modules']['debug']['traceLine'] = function ($options, $panel) {
-        $filePath = $options['file'];
-        return strtr('<a href="phpstorm://open?url={file}&line={line}">{file}:{line}</a>', ['{file}' => $filePath]);
-    };
-    //$config['modules']['debug']['dataPath'] = dirname(__DIR__).'/runtime/debug';
-}
+
 return $config;
