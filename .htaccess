@@ -1,0 +1,6 @@
+AddDefaultCharset UTF-8
+
+RewriteEngine On
+RewriteRule ^images/language/(.*)$ images/language/$1 [L]
+RedirectMatch 403 ^/images\/language/$
+RewriteRule ^.*$ index.php

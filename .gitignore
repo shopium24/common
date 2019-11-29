@@ -1,0 +1,16 @@
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+vendor/
+nbproject/
+.idea
+assets/
+runtime/
+
+composer.lock
+
+/web/themes/*/assets/.sass-cache
